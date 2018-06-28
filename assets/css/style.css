@@ -1,0 +1,32 @@
+body {
+    text-align: center;
+    color: #ffffff;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+/* video loop for the background */
+#bgVideo {
+    position: fixed;
+    right: 0;
+    top: 0;
+    min-width: 100%; 
+    min-height: 100%;
+}
+
+h1 {
+    margin: 10px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: burlywood;
+}
+
+.card {
+    opacity: .8;
+    margin-top: 20px;
+}
+
+
+
+
+
+
+
