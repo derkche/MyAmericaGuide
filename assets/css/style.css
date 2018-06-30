@@ -1,7 +1,8 @@
 body {
     text-align: center;
-    color: #ffffff;
+    color: burlywood;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-size: cover;
 }
 
 /* video loop for the background */
@@ -16,13 +17,56 @@ body {
 h1 {
     margin: 10px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: burlywood;
+    color: #ffffff;
 }
 
-.card {
-    opacity: .8;
-    margin-top: 20px;
+/* a: attributes to remove hyperlink formatting */
+a:link {
+    text-decoration: none;
 }
+a:visited {
+    text-decoration: none;
+}
+a:active {
+    text-decoration: none;
+}
+
+h2 {
+    color: black;
+    background: #ffffff;
+    opacity: .85;
+}
+
+/* API cards */
+.card {
+    opacity: .85;
+    margin: 20px 0 0 5px;
+}
+.card:hover {
+    opacity: 1;
+    background-color: azure;
+}
+
+
+/* dropdown boxes */
+#stateDropdown {
+    margin: 10px;
+    font-size: 120%;
+}
+#cityDropdown {
+    margin: 10px;
+    font-size: 120%;
+}
+
+
+#map {
+    width: 100%;
+}
+
+th td {
+    text-align: left;
+}
+
 
 
 
