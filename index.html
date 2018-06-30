@@ -9,90 +9,48 @@
         <link rel="stylesheet" href="assets/css/reset.css">
         <!-- link to the jQuery Library -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <!-- Link to Moment.js -->
+        <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
         <!-- link to Bootstrap-->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <!-- CSS style sheet -->
         <link rel="stylesheet" href="assets/css/style.css">
-    <title>Project-1</title>
+    <title>Travel America</title>
 </head>
-<body>
-        <video autoplay muted loop id="bgVideo">
-                <source src="assets/images/earth.mp4" type="video/mp4">
-        </video>
-
+<body >
+    <div id="bodyBackground">
+        <!-- for displaying initial video background  -->
+    </div>  
 
     <div class="container">
-        <div class="row">
+        <div class="row" id="title">
             <div class="col-md-12">
-                <h1>TRAVEL PROJECT</h1>
+                <h1>Travel America</h1>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <h3>Interesting information from cities in the U.S.A...</h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-              <div id="mainDropdown">
+                <div id="subtitle">
                 
-              </div>
-            </div>
-            <div class="col-md-6">
-                    <input type="text" id="text-input">
-                    <input id="add-a-button" type="submit" value="Add One!">
+                </div>  
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <div class="card" style="width: 98%">
-                    <div class="card-body">
-                      <h2 class="card-title" style="color: black">Summary/Description</h2>
-                      <h3 class="card-subtitle mb-2 text-muted">Subtitle</h3>
-                      <p class="card-text" style="color: black">Contents.</p>
-                      <a href="#" class="card-link">More...</a>
-                    </div>
-                </div>
-                <div class="card" style="width: 98%">
-                    <div class="card-body">
-                      <h2 class="card-title" style="color: black">Weather</h2>
-                      <h3 class="card-subtitle mb-2 text-muted">Current and Annual Info</h3>
-                      <p class="card-text" style="color: black">Contents.</p>
-                      <a href="#" class="card-link">More...</a>
-                    </div>
+                <div id="stateDropdown">
+                      <!-- empty div for displaying State dropdown-->
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card" style="width: 98%">
-                    <div class="card-body">
-                      <h2 class="card-title" style="color: black">Sites and Landmarks</h2>
-                      <h3 class="card-subtitle mb-2 text-muted">Things to do, places to see...</h3>
-                      <p class="card-text" style="color: black">Contents.</p>
-                      <a href="#" class="card-link">More...</a>
-                    </div>
-                </div>
-                <div class="card" style="width: 98%">
-                    <div class="card-body">
-                      <h2 class="card-title" style="color: black">Picture</h2>
-                      <h3 class="card-subtitle mb-2 text-muted">and possibly Fun Facts</h3>
-                      <p class="card-text" style="color: black">Contents.</p>
-                      <a href="#" class="card-link">More...</a>
-                    </div>
+                <div id="cityDropdown">
+                      <!-- empty div for displaying City dropdown-->
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card" style="width: 99%">
-                    <div class="card-body">
-                      <h2 class="card-title" style="color: black">Local News</h2>
-                      <h3 class="card-subtitle mb-2 text-muted">Recent Headlines</h3>
-                      <p class="card-text" style="color: black">Contents.</p>
-                      <a href="#" class="card-link">More...</a>
-                    </div>
-                </div>
-            </div>
-    </div>    
+        <div class="displayCards">
+            <!-- empty div for displaying API cards-->
+        </div>
+    </div> 
 
     <!-- JavaScript code -->
     <script type="text/javascript" src="javascript/app.js"></script>
