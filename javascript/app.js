@@ -676,16 +676,25 @@ city = {
 var noCitySelected = true;
 
 // State that the user selected (e.g. 'New Jersey')
-var selectedState = "";
+var selectedState = "State Name Format Example";
 
 // State that the user selected, with a '+' instead of any spaces (e.g. 'New+Jersey')
-var selectedStateWithPlus = "";
+var selectedStateWithPlus = "State+Name+Format+Example";
 
-// City that the user selected (e.g. 'Las Vegas')
-var selectedCity = "";
+// State that the user selected, with a '_' instead of any spaces (e.g. 'New_Jersey')
+var selectedStateWith_ = "State_Name_Format_Example";
 
-// City that the user selected, with a '+' instead of any spaces (e.g. 'Las+Vegas')
-var selectedCityWithPlus = "";
+// City that the user selected (e.g. 'LAS VEGAS')
+var selectedCityCaps = "CITY NAME FORMAT EXAMPLE";
+
+// City that the user selected in Title Case (e.g. 'Las Vegas')
+var selectedCityTitleCase = "City Name Format Example";
+
+// City that the user selected, with a '+' instead of any spaces (e.g. 'LAS+VEGAS')
+var selectedCityWithPlus = "CITY+NAME+FORMAT+EXAMPLE";
+
+// City that the user selected, with a '_' instead of any spaces (e.g. 'Las_Vegas')
+var selectedCityWith_ = "City_Name_Format_Example";
 
 // mapURL for Google map lookup
 var mapURL = "";
@@ -700,7 +709,7 @@ if (noCitySelected) {
 	$('#subtitle').html(subtitleHtml);
 };
 
-// *** PICK A STATE ***
+// *** USER PICKS A STATE ***
 var stateHtml = "<select class='selectForState'>";
 // populate state dropdowns from state array
 for (i=0; i<state.length; i++) {
@@ -715,9 +724,13 @@ $(document).on("change",".selectForState", function(event) {
 	selectedState = this.options[event.target.selectedIndex].value
 	// ignore 'select a state', only use selection if actual state is selected
 	if (selectedState != "Select a state") {
+		// Populate selectedStateWithPlus: convert 'State Name' to 'State+Name'
 		selectedStateWithPlus = selectedState.split(' ').join('+');
+		// Populate selectedStateWith_: convert 'State Name' to 'State_Name'
+		selectedStateWith_ = selectedState.split(' ').join('_');
 		console.log("selectedState=" + selectedState);
 		console.log("selectedStateWithPlus=" + selectedStateWithPlus);
+		console.log("selectedStateWith_=" + selectedStateWith_);
 		$("#cityDropdown").html(" ");
 		var selectedArray = city[selectedState];
 		var cityHtml = "<select class='selectForCity'>";
@@ -731,15 +744,27 @@ $(document).on("change",".selectForState", function(event) {
 	};
 });
 
-// *** PICK A CITY ***
+// *** USER PICKS A CITY ***
 $(document).on("change",".selectForCity", function(event) {
 	// retrieve the selected city from city dropdown
-	selectedCity = this.options[event.target.selectedIndex].value
+	selectedCityCaps = this.options[event.target.selectedIndex].value
 	// ignore 'select a city', only use selection if actual city is selected
-	if (selectedCity != "Select a city") {
-		selectedCityWithPlus = selectedCity.split(' ').join('+');
-		console.log("selectedCity=" + selectedCity);
+	if (selectedCityCaps != "Select a city") {
+		// Populate selectedCityTitleCase: convert 'ALL CAPS CITY NAME' to a 'Title Case City Name'
+		function toTitleCase() {
+			return selectedCityCaps.replace(/\b\w*/g, function(txt){
+				return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+			});
+		}
+		selectedCityTitleCase = toTitleCase(selectedCityCaps);
+		// Populate selectedCityWithPlus: convert 'City Name' to 'City+Name'
+		selectedCityWithPlus = selectedCityTitleCase.split(' ').join('+');
+		// Populate selectedCityWith_: convert 'City Name' to 'City_Name'
+		selectedCityWith_ = selectedCityTitleCase.split(' ').join('_');
+		console.log("selectedCityCaps=" + selectedCityCaps);
+		console.log("selectedCityTitleCase=" + selectedCityTitleCase);
 		console.log("selectedCityWithPlus=" + selectedCityWithPlus);
+		console.log("selectedCityWith_=" + selectedCityWith_);
 		noCitySelected = false;
 
 		// ---GET BACKGROUND PHOTO---
@@ -747,7 +772,7 @@ $(document).on("change",".selectForCity", function(event) {
 		$("#bodyBackground").empty();
 		
 		// 1 of 4- first try to get a background photo for the specific city and state from pixabay, with '+buildings'
-		var queryURL = 'https://pixabay.com/api/?key=9426516-053a04d2281391085630ae092&q=' + selectedCity + '+' + selectedState + '+buildings&image_type=photo';
+		var queryURL = 'https://pixabay.com/api/?key=9426516-053a04d2281391085630ae092&q=' + selectedCityTitleCase + '+' + selectedState + '+buildings&image_type=photo';
 		$.ajax({
 			url: queryURL,
 			method: "GET"
@@ -761,7 +786,7 @@ $(document).on("change",".selectForCity", function(event) {
 			}
 			else {
 				// 2 of 4- if no photo was found, then try to get a background photo for the specific city and state from unsplash
-				var queryURL = 'https://api.unsplash.com/search/collections?page=1&query=' + selectedCity + '+' + selectedState + '&client_id=adfe7ebf76276935093bb4be1d9597e28c6beb6d34f0fe2a590f40d3362732f9';
+				var queryURL = 'https://api.unsplash.com/search/collections?page=1&query=' + selectedCityTitleCase + '+' + selectedState + '&client_id=adfe7ebf76276935093bb4be1d9597e28c6beb6d34f0fe2a590f40d3362732f9';
 				$.ajax({
 					url: queryURL,
 					method: "GET"
@@ -813,7 +838,7 @@ $(document).on("change",".selectForCity", function(event) {
 		var weatherMaxTemp = [];
 		var weatherMinTemp = [];
 		var weatherDesc = [];
-		var queryURL = 'https://api.openweathermap.org/data/2.5/forecast?q=' + selectedCity + ',us&mode=json&appid=b76476b1c47594e9baa38a8e8abdf0cb';
+		var queryURL = 'https://api.openweathermap.org/data/2.5/forecast?q=' + selectedCityTitleCase + ',us&mode=json&appid=b76476b1c47594e9baa38a8e8abdf0cb';
 		$.ajax({
 			url: queryURL,
 			method: "GET"
@@ -892,7 +917,7 @@ $(document).on("change",".selectForCity", function(event) {
 
 		// new subtitle, after a city is selected
 		if (!noCitySelected) {
-			var subtitleHtml = "<h2>" + selectedCity + "</h2>";
+			var subtitleHtml = "<h2>" + selectedCityTitleCase + "</h2>";
 			$('#subtitle').html(subtitleHtml);
 		};
 
@@ -905,7 +930,7 @@ $(document).on("change",".selectForCity", function(event) {
 					"<a href='http://www.thecarpenterbuilding.com/wp-content/uploads/2016/05/coming-soon.jpg' target='blank'>" +	
 						"<div class='card-body'>" +
 							"<h3 class='card-title' style='color: black'>Summary/Description</h3>" +
-							"<h6 class='card-subtitle mb-2 text-muted'>ALL ABOUT " + selectedCity + "...</h6>" +
+							"<h6 class='card-subtitle mb-2 text-muted'>All about " + selectedCityTitleCase + "...</h6>" +
 							"<p class='card-text' style='color: black'>Contents.</p>" +
 						"</div>" +
 					"</a>" +
@@ -915,7 +940,7 @@ $(document).on("change",".selectForCity", function(event) {
 					"<a href='http://www.thecarpenterbuilding.com/wp-content/uploads/2016/05/coming-soon.jpg' target='blank'>" +
 						"<div class='card-body'>" +
 							"<h3 class='card-title' style='color: black'>Local Events</h3>" +
-							"<h6 class='card-subtitle mb-2 text-muted'>HAPPENINGS IN " + selectedCity + "</h6>" +
+							"<h6 class='card-subtitle mb-2 text-muted'>Happening in " + selectedCityTitleCase + "</h6>" +
 							"<p class='card-text' style='color: black'>Contents.</p>" +
 						"</div>" +
 					"</a>" +
@@ -927,11 +952,8 @@ $(document).on("change",".selectForCity", function(event) {
 					  "' target='blank'>" +
 						"<div class='card-body'>" +
 							"<h3 class='card-title' style='color: black'>Forecast</h3>" +
-							"<h6 class='card-subtitle mb-2 text-muted'>UPCOMING WEATHER IN " + selectedCity + "</h6>" +
+							"<h6 class='card-subtitle mb-2 text-muted'>Upcoming weather in " + selectedCityTitleCase + "</h6>" +
 							"<p class='card-text' style='color: black' id='weatherCard'></p>" +
-							// "<a href='https://www.google.com/search?safe=active&q=weather+" + 
-							// 	selectedCityWithPlus + "+" + selectedStateWithPlus +
-							// 	"' class='card-link' target='blank'>More...</a>" +
 						"</div>" +
 					"</a>" +
 				"</div>" +
@@ -942,7 +964,7 @@ $(document).on("change",".selectForCity", function(event) {
 					"<a href='http://www.thecarpenterbuilding.com/wp-content/uploads/2016/05/coming-soon.jpg' target='blank'>" +
 						"<div class='card-body'>" +
 							"<h3 class='card-title' style='color: black'>Sites and Landmarks</h3>" +
-							"<h6 class='card-subtitle mb-2 text-muted'>THINGS TO SEE IN " + selectedCity + "</h6>" +
+							"<h6 class='card-subtitle mb-2 text-muted'>What to see in " + selectedCityTitleCase + "</h6>" +
 							"<p class='card-text' style='color: black'>Contents.</p>" +
 						"</div>" +
 					"</a>" +
@@ -964,7 +986,7 @@ $(document).on("change",".selectForCity", function(event) {
 					"<a href='http://www.thecarpenterbuilding.com/wp-content/uploads/2016/05/coming-soon.jpg' target='blank'>" + 
 						"<div class='card-body'>" +
 							"<h3 class='card-title' style='color: black'>Recent News</h3>" +
-							"<h6 class='card-subtitle mb-2 text-muted'>HEADINES FROM " + selectedCity + "</h6>" +
+							"<h6 class='card-subtitle mb-2 text-muted'>Headlines from " + selectedCityTitleCase + "</h6>" +
 							"<p class='card-text' style='color: black'>Contents.</p>" +
 						"</div>" +
 					"</a>" +
