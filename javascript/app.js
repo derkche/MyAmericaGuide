@@ -986,7 +986,52 @@ $(document).on("change",".selectForCity", function(event) {
         });
 
 		// ---GET LOCAL EVENTS CARD---
-		// code goes here
+		// var Url_Section = "http://api.eventful.com/json/events/search?app_key=fSGfcc4Z29h9FVFm&location=" + selectedCityWithPlus + "+" + selectedStateWithPlus;
+
+		// $.ajax({ url: Url_Section, method: "GET" })
+		//   .done(function (NEWSinfo) {
+		// 	for ( var i = 0; i < 9; i++){
+		// 	NEWSparse = JSON.parse(NEWSinfo)
+		// 	//console.log(NEWSparse)
+		// 	console.log(NEWSparse.events.event[i].title)
+		// 	console.log(NEWSparse.events.event[i].venue_address)
+		// 	console.log(NEWSparse.events.event[i].venue_url)
+		// 	}
+		//   })
+
+
+		var location = (selectedCityWithPlus + "+" + selectedStateWithPlus);
+
+		var queryURL = 'https://api.meetup.com/find/groups?location=' + location + '&key=b5140652b17694d7e1972605528496c&group_urlname=ny-tech&sign=true&order+newest'
+
+		$.ajax({
+			url: queryURL,
+			method: "GET"
+		}).then(function (response) {
+			// var result = response[0].name
+			// console.log("result=" + result);
+			var e = Math.floor((Math.random() * response.length) + 1);
+			var eventName = response[e].name
+			var eventDesc = response[e].description
+			$("#eventDescription").append("<strong>" + eventName + "</strong>" + eventDesc + "<br>-----------<br>");
+			if (e == 1) {
+				e = 0;
+			}
+			else {
+				e = 1;
+				$.ajax({
+					url: queryURL,
+					method: "GET"
+				}).then(function (response) {
+					var eventName = response[e].name
+					var eventDesc = response[e].description
+					$("#eventDescription").append("<strong>" + eventName + "</strong>" + eventDesc);
+				})
+				}
+			})
+
+
+
 
 		// ---GET LANDMARKS CARD---
 		// code goes here
@@ -1006,7 +1051,6 @@ $(document).on("change",".selectForCity", function(event) {
 					for (var i = 0; i < 5; i++) {
 						threadTitle=NEWSinfo.posts[i].thread.title;
 						threadURL=NEWSinfo.posts[i].thread.url;
-						console.log("threadTitle=" + threadTitle);
 						if (threadTitle>" ") {
 							$('#newsCard').append(threadTitle + "<br><a href='" + threadURL + "'>Click here for more...</a><br><br>");
 						}
@@ -1041,13 +1085,16 @@ $(document).on("change",".selectForCity", function(event) {
 						"</div>" +
 					// "</a>" +
 				"</div>" +
+
 				// *** EVENTS DISPLAY ***
 				"<div class='card' style='width: 98%'>" +
-					"<div class='card-body'>" +
-						"<h3 class='card-title' style='color: black'>Local Events</h3>" +
-						"<h6 class='card-subtitle mb-2 text-muted'>Happening in " + selectedCityTitleCase + "</h6>" +
-						"<p class='card-text' style='color: black' id='eventsCard'></p>" +
-					"</div>" +
+					// "<a href='http://www.thecarpenterbuilding.com/wp-content/uploads/2016/05/coming-soon.jpg' target='blank'>" +
+						"<div class='card-body1'>" +
+							"<h3 class='card-title' style='color: black' id='eventTitle'>Local Events</h3>" +
+							"<h6 class='card-subtitle mb-2 text-muted'>Happening in " + selectedCityTitleCase + "</h6>" +
+							"<p class='card-text' style='overflow-y: auto; height: 300px; color: black' id='eventDescription'></p>" +
+						"</div>" +
+					// "</a>" +
 				"</div>" +
 				// *** WEATHER CARD DISPLAY ***
 				"<div class='card' style='width: 98%'>" +
@@ -1069,7 +1116,7 @@ $(document).on("change",".selectForCity", function(event) {
 						"<div class='card-body'>" +
 							"<h3 class='card-title' style='color: black'>Sites and Landmarks</h3>" +
 							"<h6 class='card-subtitle mb-2 text-muted'>What to see in " + selectedCityTitleCase + "</h6>" +
-							"<p class='card-text' style='color: black'>Contents.</p>" +
+							"<p class='card-text' style='color: black'></p>" +
 						"</div>" +
 					"</a>" +
 				"</div>" +
