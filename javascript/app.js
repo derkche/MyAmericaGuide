@@ -985,21 +985,7 @@ $(document).on("change",".selectForCity", function(event) {
             }
         });
 
-		// ---GET LOCAL EVENTS CARD---
-		// var Url_Section = "http://api.eventful.com/json/events/search?app_key=fSGfcc4Z29h9FVFm&location=" + selectedCityWithPlus + "+" + selectedStateWithPlus;
-
-		// $.ajax({ url: Url_Section, method: "GET" })
-		//   .done(function (NEWSinfo) {
-		// 	for ( var i = 0; i < 9; i++){
-		// 	NEWSparse = JSON.parse(NEWSinfo)
-		// 	//console.log(NEWSparse)
-		// 	console.log(NEWSparse.events.event[i].title)
-		// 	console.log(NEWSparse.events.event[i].venue_address)
-		// 	console.log(NEWSparse.events.event[i].venue_url)
-		// 	}
-		//   })
-
-
+		// --- EVENTS ---
 		var location = (selectedCityWithPlus + "+" + selectedStateWithPlus);
 
 		var queryURL = 'https://api.meetup.com/find/groups?location=' + location + '&key=b5140652b17694d7e1972605528496c&group_urlname=ny-tech&sign=true&order+newest'
@@ -1008,8 +994,6 @@ $(document).on("change",".selectForCity", function(event) {
 			url: queryURL,
 			method: "GET"
 		}).then(function (response) {
-			// var result = response[0].name
-			// console.log("result=" + result);
 			var e = Math.floor((Math.random() * response.length) + 1);
 			var eventName = response[e].name
 			var eventDesc = response[e].description
@@ -1039,7 +1023,7 @@ $(document).on("change",".selectForCity", function(event) {
 		// ---GET NEWS CARD---
 		var threadTitle = false;
 		var threadURL = "";
-		var Url_Section = "http://webhose.io/filterWebContent?token=bd31f441-28cc-46aa-8c99-81d3f5040fc7&format=json&sort=crawled&q=" + selectedCityWith20 + "%20" +selectedStateWith20;
+		var Url_Section = "https://webhose.io/filterWebContent?token=bd31f441-28cc-46aa-8c99-81d3f5040fc7&format=json&sort=crawled&q=" + selectedCityWith20 + "%20" +selectedStateWith20;
 
        
            $.ajax({ 
