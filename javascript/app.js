@@ -922,7 +922,7 @@ $(document).on("change",".selectForCity", function(event) {
 		
 
 
-		// ---GET SUMMARY/DESCRIPTION CARD---
+		// ---GET SUMMARY CARD---
         //Set the wiki search term to grab the state with underscores
         queryState = selectedStateWith_
         //Set the wiki search term to grab the state with title case and replace spaces with underscores
@@ -985,10 +985,10 @@ $(document).on("change",".selectForCity", function(event) {
             }
         });
 
-		// --- EVENTS ---
+		// --- EVENTS CARD---
 		var location = (selectedCityWithPlus + "+" + selectedStateWithPlus);
 
-		var queryURL = 'https://api.meetup.com/find/groups?location=' + location + '&key=b5140652b17694d7e1972605528496c&group_urlname=ny-tech&sign=true&order+newest'
+		var queryURL = 'https://cors-anywhere.herokuapp.com/https://api.meetup.com/find/groups?location=' + location + '&key=b5140652b17694d7e1972605528496c&group_urlname=ny-tech&sign=true&order+newest'
 
 		$.ajax({
 			url: queryURL,
@@ -1015,7 +1015,8 @@ $(document).on("change",".selectForCity", function(event) {
 			})
 
 
-
+		// ---GET YELP CARD---
+		// code goes here
 
 		// ---GET LANDMARKS CARD---
 		// code goes here
@@ -1023,7 +1024,7 @@ $(document).on("change",".selectForCity", function(event) {
 		// ---GET NEWS CARD---
 		var threadTitle = false;
 		var threadURL = "";
-		var Url_Section = "https://webhose.io/filterWebContent?token=bd31f441-28cc-46aa-8c99-81d3f5040fc7&format=json&sort=crawled&q=" + selectedCityWith20 + "%20" +selectedStateWith20;
+		var Url_Section = "https://cors-anywhere.herokuapp.com/https://webhose.io/filterWebContent?token=bd31f441-28cc-46aa-8c99-81d3f5040fc7&format=json&sort=crawled&q=" + selectedCityWith20 + "%20" +selectedStateWith20;
 
        
            $.ajax({ 
@@ -1058,30 +1059,32 @@ $(document).on("change",".selectForCity", function(event) {
 		// html text for displaying all of the API cards
 		var mainHtml = 
 		"<div class='row'>" +
-			"<div class='col-md-6'>" +
-				// *** SUMMARY/DESCRIPTION CARD DISPLAY ***
-				"<div class='card' style='width: 98%'>" +
+			"<div class='col-md-12'>" +
+				// *** SUMMARY CARD DISPLAY ***
+				"<div class='card'>" +
 					// "<a href='" + urlForWikiLink + "' target='blank'>" +	
-						"<div class='card-body' style='overflow-y: auto; height: 300px'>" +
-							"<h3 class='card-title' style='color: black'>Summary/Description</h3>" +
-							"<h6 class='card-subtitle mb-2 text-muted'>All about " + selectedCityTitleCase + "...</h6>" +
+						"<div class='card-body' style='overflow-y: auto; max-height: 150px'>" +
+							"<h3 class='card-title' style='color: black'>Summary</h3>" +
+							// "<h6 class='card-subtitle mb-2 text-muted'>All about " + selectedCityTitleCase + "...</h6>" +
 							"<p class='card-text' style='color: black' id='wiki-card'></p>" +
 						"</div>" +
 					// "</a>" +
 				"</div>" +
-
-				// *** EVENTS DISPLAY ***
-				"<div class='card' style='width: 98%'>" +
-					// "<a href='http://www.thecarpenterbuilding.com/wp-content/uploads/2016/05/coming-soon.jpg' target='blank'>" +
-						"<div class='card-body1'>" +
-							"<h3 class='card-title' style='color: black' id='eventTitle'>Local Events</h3>" +
-							"<h6 class='card-subtitle mb-2 text-muted'>Happening in " + selectedCityTitleCase + "</h6>" +
-							"<p class='card-text' style='overflow-y: auto; height: 300px; color: black' id='eventDescription'></p>" +
-						"</div>" +
-					// "</a>" +
+			"</div>" +
+		"</div>" +
+		"<div class='row'>" +
+			"<div class='col-md-6'>" +
+				// *** YELP CARD DISPLAY ***
+				"<div class='card'>" +
+						"<div class='card-body'>" +
+					"<h3 class='card-title' style='color: black'>Yelp</h3>" +
+						"<h6 class='card-subtitle mb-2 text-muted'>Check out user reviews in " + selectedCityTitleCase + "</h6>" +
+						"<p class='card-text' style='overflow-y: auto; max-height: 300px; color: black' id='yelpCard'>" +
+						"</p>" +
+					"</div>" +
 				"</div>" +
 				// *** WEATHER CARD DISPLAY ***
-				"<div class='card' style='width: 98%'>" +
+				"<div class='card'>" +
 					"<a href='https://www.google.com/search?safe=active&q=weather+" + 
 					  selectedCityWithPlus + "+" + selectedStateWithPlus +
 					  "' target='blank'>" +
@@ -1092,10 +1095,20 @@ $(document).on("change",".selectForCity", function(event) {
 						"</div>" +
 					"</a>" +
 				"</div>" +
+				// *** EVENTS DISPLAY ***
+				"<div class='card'>" +
+					// "<a href='http://www.thecarpenterbuilding.com/wp-content/uploads/2016/05/coming-soon.jpg' target='blank'>" +
+						"<div class='card-body1'>" +
+							"<h3 class='card-title' style='color: black' id='eventTitle'>Local Events</h3>" +
+							"<h6 class='card-subtitle mb-2 text-muted'>Happening in " + selectedCityTitleCase + "</h6>" +
+							"<p class='card-text' style='overflow-y: auto; max-height: 300px; color: black' id='eventDescription'></p>" +
+						"</div>" +
+					// "</a>" +
+				"</div>" +
 			"</div>" +
 			"<div class='col-md-6'>" +
 				// *** SITES/LANDMARKS CARD DISPLAY ***
-				"<div class='card' style='width: 98%'>" +
+				"<div class='card'>" +
 					"<a href='http://www.thecarpenterbuilding.com/wp-content/uploads/2016/05/coming-soon.jpg' target='blank'>" +
 						"<div class='card-body'>" +
 							"<h3 class='card-title' style='color: black'>Sites and Landmarks</h3>" +
@@ -1105,7 +1118,7 @@ $(document).on("change",".selectForCity", function(event) {
 					"</a>" +
 				"</div>" +
 				// *** MAP CARD DISPLAY ***
-				"<div class='card' style='width: 98%'>" +
+				"<div class='card'>" +
 					"<a href='https://www.google.com/maps/search/?api=1&query=" + 
 						selectedCityWithPlus + "+" + selectedStateWithPlus + 
 						"+landmarks' target='blank'>" +
@@ -1117,7 +1130,7 @@ $(document).on("change",".selectForCity", function(event) {
 					"</a>" +
 				"</div>" +
 				// *** NEWS CARD DISPLAY ***
-				"<div class='card' style='width: 98%'>" +
+				"<div class='card'>" +
 					"<div class='card-body'>" +
 						"<h3 class='card-title' style='color: black'>Recent News</h3>" +
 						"<h6 class='card-subtitle mb-2 text-muted'>Headlines from " + selectedCityTitleCase + "</h6>" +
@@ -1125,6 +1138,7 @@ $(document).on("change",".selectForCity", function(event) {
 						"</p>" +
 					"</div>" +
 				"</div>" +
+						
 			"</div>" +
 		"</div>" ;
 		

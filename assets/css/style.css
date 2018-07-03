@@ -34,13 +34,13 @@ a:active {
 h2 {
     color: black;
     background: #ffffff;
-    opacity: .85;
+    opacity: .87;
 }
 
 /* API cards */
 .card {
-    opacity: .85;
-    margin: 20px 0 0 5px;
+    opacity: .87;
+    margin: 15px 0 5px 5px;
 }
 .card:hover {
     opacity: 1;
@@ -80,6 +80,11 @@ th td {
 #eventDescription {
     font-size: 80%;
     text-align: left;
+    padding: 10px;
+}
+
+#eventTitle {
+    padding-top: 5px;
 }
 
 
