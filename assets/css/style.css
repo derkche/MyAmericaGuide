@@ -33,18 +33,21 @@ a:active {
 
 h2 {
     color: black;
-    background: #ffffff;
-    opacity: .87;
 }
 
 /* API cards */
 .card {
     opacity: .87;
-    margin: 15px 0 5px 5px;
+    margin: 15px 0 5px 0;
 }
 .card:hover {
     opacity: 1;
     background-color: azure;
+}
+
+#cardsub {
+    opacity: .87;
+    margin: 0;
 }
 
 
@@ -68,17 +71,17 @@ th td {
 }
 
 #newsCard {
-    font-size: 80%;
+    font-size: 90%;
     text-align: left;
 }
 
 #wiki-card {
-    font-size: 80%;
+    font-size: 90%;
     text-align: left;
 }
 
 #eventDescription {
-    font-size: 80%;
+    font-size: 90%;
     text-align: left;
     padding: 10px;
 }
@@ -87,6 +90,14 @@ th td {
     padding-top: 5px;
 }
 
+#landmarkCard {
+    font-size: 90%;
+}
+
+#yelpCard {
+    font-size: 90%;
+    text-align: left;
+}
 
 
 
