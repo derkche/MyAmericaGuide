@@ -15,9 +15,40 @@ body {
 }
 
 h1 {
-    margin: 10px;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin: 14px;
+    font-family: 'Shrikhand', cursive;
+    letter-spacing: 2px;
     color: #ffffff;
+    text-shadow: 3px 3px 4px black;
+}
+
+h2 {
+    font-family: 'Source Serif Pro', serif;
+    color: black;
+}
+
+h3 {
+    font-family: 'Source Serif Pro', serif;
+}
+
+.card-body {
+    margin-top: 4px;
+}
+
+.selectForCity {
+    font-family: 'Source Serif Pro', serif;
+}
+
+.statePicked {
+    font-family: 'Source Serif Pro', serif;
+}
+
+subtitle {
+    font-family: 'Source Serif Pro', serif;
+}
+
+#dropShadow {
+    text-shadow: 2px 2px 4px black;
 }
 
 /* a: attributes to remove hyperlink formatting */
@@ -29,10 +60,6 @@ a:visited {
 }
 a:active {
     text-decoration: none;
-}
-
-h2 {
-    color: black;
 }
 
 /* API cards */
@@ -55,10 +82,12 @@ h2 {
 #stateDropdown {
     margin: 10px;
     font-size: 120%;
+    font-family: 'Source Serif Pro', serif;
 }
 #cityDropdown {
     margin: 10px;
     font-size: 120%;
+    font-family: 'Source Serif Pro', serif;
 }
 
 
