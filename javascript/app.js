@@ -673,7 +673,7 @@ city = {
     "Select a state": [" "]
 };
 
-var noCitySelected = true;
+var citySelected = false;
 
 // State that the user selected (e.g. 'New Jersey')
 var selectedState = "State Name Format Example";
@@ -705,11 +705,30 @@ var selectedCityWith20 = "City%20Name%20Format%20Example";
 // mapURL for Google map lookup
 var mapURL = "";
 
+// Initialize Firebase
+var config = {
+    apiKey: "AIzaSyDGvnhQ0zd6DyA8LX9QtI8Q7i1vmY5E8JI",
+    authDomain: "somethingwithapis.firebaseapp.com",
+    databaseURL: "https://somethingwithapis.firebaseio.com",
+    projectId: "somethingwithapis",
+    storageBucket: "",
+    messagingSenderId: "217401981801"
+  };
+// var config = {
+// 	apiKey: "AIzaSyAHbW0-LC6qhLkMY0ILmASA7aGIYuHiTuE",
+//  	authDomain: "something-with-apis.firebaseapp.com",
+// 	databaseURL: "https://something-with-apis.firebaseio.com",
+// 	projectId: "something-with-apis",
+// 	storageBucket: "something-with-apis.appspot.com",
+// 	messagingSenderId: "623831929467"
+// };
+firebase.initializeApp(config);
+
 // clear out the API cards on load
 $(".displayCards").empty();
 
 // video background plays until a city is picked
-if (noCitySelected) {
+if (!citySelected) {
 	$("#bodyBackground").prepend("<video autoplay muted loop id='bgVideo'><source src='assets/images/USA_Map.mp4' type='video/mp4'></video>");
 	var	subtitleHtml = "<h3>Destinations from Coast to Coast...</h3>";
 	$('#subtitle').html(subtitleHtml);
@@ -724,6 +743,10 @@ for (i=0; i<state.length; i++) {
 stateHtml = stateHtml + "</select>";
 // send state dropdown list to the screen
 $("#stateDropdown").append(stateHtml);
+
+var recentSelectionsArray = [];
+var arrayLength = 0;
+
 
 $(document).on("change",".selectForState", function(event) {
 	// retrieve the selected state from state dropdown list
@@ -749,7 +772,16 @@ $(document).on("change",".selectForState", function(event) {
 		cityHtml = cityHtml + "</select>";
 		// send city dropdown list to the screen
 		$("#cityDropdown").append(cityHtml);
+
 	};
+});
+
+// Firebase watcher + initial loader 
+firebase.database().ref().on("value", function(snapshot) {
+	// recent selections stored as an array
+	recentSelectionsArray = snapshot.val().package
+	// get array length
+	arrayLength = recentSelectionsArray.length;
 });
 
 // *** USER PICKS A CITY ***
@@ -775,7 +807,24 @@ $(document).on("change",".selectForCity", function(event) {
 		console.log("selectedCityTitleCase=" + selectedCityTitleCase);
 		// console.log("selectedCityWithPlus=" + selectedCityWithPlus);
 		// console.log("selectedCityWith_=" + selectedCityWith_);
-		noCitySelected = false;
+		citySelected = true;
+
+		if (citySelected) {
+			// write the recent selections to Firebase
+			// first loop through and shift everything in the array one spot...
+			for(var i = arrayLength; i > 0; i--) {
+				// caps it at 20 for the display (21 entries total, but we won't display the current entry, so will display 20)
+				if (i < 21) {
+					recentSelectionsArray[i] = recentSelectionsArray[i-1];
+				};
+			};
+			// ...then put the current selection in the front of the array
+			recentSelectionsArray[0] = selectedCityTitleCase + ", " + selectedState;
+			firebase.database().ref().set({
+				package: recentSelectionsArray,
+			})
+			// arrayLength = recentSelectionsArray.length;
+		}
 
 		// ---GET BACKGROUND PHOTO---
 		// clear out video background
@@ -1006,6 +1055,7 @@ $(document).on("change",".selectForCity", function(event) {
 			method: "GET"
 		}).then(function (response) {
 			console.log("events card 1st lookup");
+			if (response.length > 0) {
 			var e = Math.floor((Math.random() * response.length));
 			var eventName = response[e].name
 			var eventDesc = response[e].description
@@ -1025,15 +1075,21 @@ $(document).on("change",".selectForCity", function(event) {
 					$("#eventDescription").append("<strong>" + eventName + "</strong>" + eventDesc);
 				})
 				}
+			}
+			else {
+				$("#eventDescription").append("Sorry, no upcoming events are listed for " + selectedCityTitleCase + ".");
+			}
 			})
 
 
 
 
 		// ---GET YELP CARD---
-        var yelpQueryUrl = "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?category=food&sort_by=rating&location="+selectedCityTitleCase
-        var yelpApiKey = "Bearer JkBF7la1c2_RebxbPNy4T6s7NWjAPhYlD55y24-RIVVf8gWVZlPsjUqO_2sCR7Th8_McJlMkLz7DuG2EdDXjGO6RsBIKide0AwVTuI5trWxNcyJRVGV3Pso1wnI6W3Yx"
-        $.ajax({
+        var yelpQueryUrl = "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?category=food&sort_by=rating&location=" + selectedCityWithPlus + "+" + selectedStateWithPlus;
+		var yelpApiKey = "Bearer JkBF7la1c2_RebxbPNy4T6s7NWjAPhYlD55y24-RIVVf8gWVZlPsjUqO_2sCR7Th8_McJlMkLz7DuG2EdDXjGO6RsBIKide0AwVTuI5trWxNcyJRVGV3Pso1wnI6W3Yx";
+		// console.log("yelpQueryUrl=" + yelpQueryUrl);
+		// console.log("yelpApiKey=" + yelpApiKey);
+		$.ajax({
             url: yelpQueryUrl,
             dataType: "json",
             method: "GET",
@@ -1041,7 +1097,7 @@ $(document).on("change",".selectForCity", function(event) {
         }).then(function(response){
             results = response.businesses;
 			console.log("yelp card");
-			console.log("yelp response.businesses.length=" + response.businesses.length);
+			// console.log("yelp response.businesses.length=" + response.businesses.length);
 			if (response.businesses.length > 0) {
 				for (var i = 0; i < response.businesses.length; i++) {
 					if (response.businesses[i].name > " ") {
@@ -1077,24 +1133,19 @@ $(document).on("change",".selectForCity", function(event) {
             var landmarkURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude + "&radius=1500&type=restaurant,museum,amusment_park,art_gallery,shopping_mall,casino,stadium,zoo,bar&key=AIzaSyD9ww08pUQRaUb_lJ53Y09vw4ArfR6PqnA";
             console.log("landmark location lookup");
 			// Show landmarks on the page
-			if (!latitude || !longitude) {
-				$.ajax({
-					url: landmarkURL,
-					datatype: "json",
-					method: "GET"
-				}).then(function(response){
-					console.log("landmark card");
-					if (response.results.length > 0)
-						for(var i=0; i < response.results.length; i++) {
-						var namevar = response.results[i].name;
-						var maplink = response.results[i].photos[0].html_attributions;
-						$("#landmarkCard").append( namevar + "<br>" + maplink + "<br><br>");
-					}
-				})
-			}
-			else {
-				$("#landmarkCard").append("Click here...");
-			}
+			$.ajax({
+				url: landmarkURL,
+				datatype: "json",
+				method: "GET"
+			}).then(function(response){
+				console.log("landmark card");
+				if (response.results.length > 0)
+					for(var i=0; i < response.results.length; i++) {
+					var namevar = response.results[i].name;
+					var maplink = response.results[i].photos[0].html_attributions;
+					$("#landmarkCard").append( namevar + "<br>" + maplink + "<br><br>");
+				}
+			})
         });
 
 
@@ -1134,7 +1185,7 @@ $(document).on("change",".selectForCity", function(event) {
 
 
 		// new subtitle, after a city is selected
-		if (!noCitySelected) {
+		if (citySelected) {
 			var subtitleHtml = "<h2>" + selectedCityTitleCase+ ", " + selectedState + "</h2>";
 			$('#subtitle').html("<div class='row'><div class='col-md-12'><a href='https://www.google.com/search?q=" + selectedCityWithPlus + "%2C+" + selectedStateWithPlus + "' target='blank'><div class='card' id='cardsub'><div class='card-body'><h2>" + selectedCityTitleCase+ ", " + selectedState + "</h2></div></a></div></div>");
 		};
@@ -1142,21 +1193,14 @@ $(document).on("change",".selectForCity", function(event) {
 		// html text for displaying all of the API cards
 		var mainHtml = 
 		"<div class='row'>" +
-			"<div class='col-md-12'>" +
+			"<div class='col-md-6'>" +
 				// *** SUMMARY CARD DISPLAY ***
 				"<div class='card'>" +
-					// "<a href='" + urlForWikiLink + "' target='blank'>" +	
-						"<div class='card-body' style='overflow-y: auto; max-height: 150px'>" +
+						"<div class='card-body' style='overflow-y: auto; max-height: 300px'>" +
 							"<h3 class='card-title' style='color: black'>Summary</h3>" +
-							// "<h6 class='card-subtitle mb-2 text-muted'>All about " + selectedCityTitleCase + "...</h6>" +
 							"<p class='card-text' style='color: black' id='wiki-card'></p>" +
 						"</div>" +
-					// "</a>" +
 				"</div>" +
-			"</div>" +
-		"</div>" +
-		"<div class='row'>" +
-			"<div class='col-md-6'>" +
 				// *** YELP CARD DISPLAY ***
 				"<div class='card'>" +
 						"<div class='card-body'>" +
@@ -1166,11 +1210,28 @@ $(document).on("change",".selectForCity", function(event) {
 						"</p>" +
 					"</div>" +
 				"</div>" +
+				// *** EVENTS DISPLAY ***
+				"<div class='card'>" +
+						"<div class='card-body1'>" +
+							"<h3 class='card-title' style='color: black' id='eventTitle'>Local Events</h3>" +
+							"<h6 class='card-subtitle mb-2 text-muted'>Happening in the " + selectedCityTitleCase + " area</h6>" +
+							"<p class='card-text' style='overflow-y: auto; max-height: 300px; color: black' id='eventDescription'></p>" +
+						"</div>" +
+				"</div>" +
+				// *** RECENT SEARCHES CARD DISPLAY ***
+				"<div class='card'>" +
+					"<div class='card-body'>" +
+						"<h3 class='card-title' style='color: black'>Recent Searches</h3>" +
+						"<p class='card-text' style='overflow-y: auto; max-height: 300px; color: black' id='recentSearchesCard'></p>" +
+					"</div>" +
+				"</div>" +
+			"</div>" +
+			"<div class='col-md-6'>" +
 				// *** WEATHER CARD DISPLAY ***
 				"<div class='card'>" +
 					"<a href='https://www.google.com/search?safe=active&q=weather+" + 
-					  selectedCityWithPlus + "+" + selectedStateWithPlus +
-					  "' target='blank'>" +
+					selectedCityWithPlus + "+" + selectedStateWithPlus +
+					"' target='blank'>" +
 						"<div class='card-body'>" +
 							"<h3 class='card-title' style='color: black'>Forecast</h3>" +
 							"<h6 class='card-subtitle mb-2 text-muted'>Upcoming weather in " + selectedCityTitleCase + "</h6>" +
@@ -1178,25 +1239,13 @@ $(document).on("change",".selectForCity", function(event) {
 						"</div>" +
 					"</a>" +
 				"</div>" +
-				// *** EVENTS DISPLAY ***
-				"<div class='card'>" +
-					// "<a href='http://www.thecarpenterbuilding.com/wp-content/uploads/2016/05/coming-soon.jpg' target='blank'>" +
-						"<div class='card-body1'>" +
-							"<h3 class='card-title' style='color: black' id='eventTitle'>Local Events</h3>" +
-							"<h6 class='card-subtitle mb-2 text-muted'>Happening in " + selectedCityTitleCase + "</h6>" +
-							"<p class='card-text' style='overflow-y: auto; max-height: 300px; color: black' id='eventDescription'></p>" +
-						"</div>" +
-					// "</a>" +
-				"</div>" +
-			"</div>" +
-			"<div class='col-md-6'>" +
 				// *** MAP CARD DISPLAY ***
 				"<div class='card'>" +
 					"<a href='https://www.google.com/maps/search/?api=1&query=" + 
 					selectedCityWithPlus + "+" + selectedStateWithPlus + 
 					"+landmarks' target='blank'>" +
 						"<div class='card-body'>" +
-							"<h3 class='card-title' style='color: black'>" + selectedCityTitleCase + "</h3>" +
+							// "<h3 class='card-title' style='color: black'>" + selectedCityTitleCase + "</h3>" +
 							"<div class='card-body'>" +
 								"<img id='map' src='https://maps.googleapis.com/maps/api/staticmap?&center=" + 
 									selectedCityWithPlus + "+" + selectedStateWithPlus + 
@@ -1204,15 +1253,6 @@ $(document).on("change",".selectForCity", function(event) {
 							"</div>" +
 						"</div>" +
 					"</a>" +
-				"</div>" +
-				// *** NEWS CARD DISPLAY ***
-				"<div class='card'>" +
-					"<div class='card-body'>" +
-						"<h3 class='card-title' style='color: black'>Recent News</h3>" +
-						"<h6 class='card-subtitle mb-2 text-muted'>Headlines from " + selectedCityTitleCase + "</h6>" +
-						"<p class='card-text' style='overflow-y: auto; max-height: 300px; color: black' id='newsCard'>" +
-						"</p>" +
-					"</div>" +
 				"</div>" +
 				// *** SITES/LANDMARKS CARD DISPLAY ***
                 "<div class='card'>" +
@@ -1224,21 +1264,30 @@ $(document).on("change",".selectForCity", function(event) {
                         "</div>" +
                     "</a>" +
 				"</div>" +
-				// *** RECENT SEARCHES CARD DISPLAY ***
-                "<div class='card'>" +
-                    "<div class='card-body'>" +
-                        "<h3 class='card-title' style='color: black'>Recent Searches</h3>" +
-                        "<p class='card-text' style='overflow-y: auto; max-height: 300px; color: black' id='recentCard'></p>" +
-                    "</div>" +
-                "</div>" +
+				// *** NEWS CARD DISPLAY ***
+				"<div class='card'>" +
+					"<div class='card-body'>" +
+						"<h3 class='card-title' style='color: black'>Recent News</h3>" +
+						"<h6 class='card-subtitle mb-2 text-muted'>Headlines from " + selectedCityTitleCase + "</h6>" +
+						"<p class='card-text' style='overflow-y: auto; max-height: 300px; color: black' id='newsCard'>" +
+						"</p>" +
+					"</div>" +
+				"</div>" +
 			"</div>" +
 		"</div>" ;
 		
-		// write out all of the API cards to the screen
+		// write out the API cards to the screen
 		$(".displayCards").html(" ");
 		$('.displayCards').html(mainHtml);
+		// loop through the recent selections array and display the Firebase selections
+		for (var i=1; i < arrayLength; i++) {
+			// console.log("recentSelectionsArray[i]=" + recentSelectionsArray[i])
+			$("#recentSearchesCard").append(recentSelectionsArray[i] + "<br>");
+		}
 	};
 });
+
+
 
 
 
