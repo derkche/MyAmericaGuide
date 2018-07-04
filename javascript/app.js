@@ -115,7 +115,7 @@ city = {
 		"ANAKTUVUK PASS", "ANCHORAGE", "ANCHOR POINT", "ANDERSON", "ANGOON", "ANIAK", "ANVIK", "ARCTIC VILLAGE", "ATKA", "ATMAUTLUAK", "ATQASUK", "ATTU STATION",
 		"BARROW", "BEAR CREEK", "BEAVER", "BELUGA", "BETHEL", "BETTLES", "BIG DELTA", "BIG LAKE", "BIRCH CREEK", "BREVIG MISSION", "BUCKLAND", "BUFFALO SOAPSTONE",
 		"BUTTE", "CANTWELL", "CENTRAL", "CHALKYITSIK", "CHASE", "CHEFORNAK", "CHENEGA", "CHEVAK", "CHICKALOON", "CHICKEN", "CHIGNIK", "CHIGNIK LAGOON", "CHIGNIK LAKE",
-		"CHINIAK", "CHISANA", "CHISTOCHINA", "CHITINA", "CHUATHBALUK", "CIRCLE", "CLAM GULCH", "CLARK S POINT", "COFFMAN COVE", "COHOE", "COLD BAY", "COLDFOOT",
+		"CHINIAK", "CHISANA", "CHISTOCHINA", "CHITINA", "CHUATHBALUK", "CIRCLE", "CLAM GULCH", "CLARKS POINT", "COFFMAN COVE", "COHOE", "COLD BAY", "COLDFOOT",
 		"COLLEGE", "COOPER LANDING", "COPPER CENTER", "COPPERVILLE", "CORDOVA", "COVENANT LIFE", "CRAIG", "CROOKED CREEK", "CROWN POINT", "CUBE COVE", "DEERING",
 		"DELTA JUNCTION", "DELTANA", "DIAMOND RIDGE", "DILLINGHAM", "DIOMEDE", "DOT LAKE", "DOT LAKE VILLAGE", "DRY CREEK", "EAGLE", "EAGLE VILLAGE", "EDNA BAY",
 		"EEK", "EGEGIK", "EIELSON AFB", "EKWOK", "ELFIN COVE", "ELIM", "EMMONAK", "ESTER", "EVANSVILLE", "EXCURSION INLET", "FAIRBANKS", "FALSE PASS", "FARM LOOP",
@@ -792,6 +792,7 @@ $(document).on("change",".selectForCity", function(event) {
 	if (selectedCityCaps != "Select a city") {
 		// Populate selectedCityTitleCase: convert 'ALL CAPS CITY NAME' to a 'Title Case City Name'
 		function toTitleCase() {
+			citySelected = true;
 			return selectedCityCaps.replace(/\b\w*/g, function(txt){
 				return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 			});
@@ -807,8 +808,11 @@ $(document).on("change",".selectForCity", function(event) {
 		console.log("selectedCityTitleCase=" + selectedCityTitleCase);
 		// console.log("selectedCityWithPlus=" + selectedCityWithPlus);
 		// console.log("selectedCityWith_=" + selectedCityWith_);
-		citySelected = true;
+		
 
+
+
+		// ---GET RECENT SEARCHES CARD---
 		if (citySelected) {
 			// write the recent selections to Firebase
 			// first loop through and shift everything in the array one spot...
@@ -1178,11 +1182,6 @@ $(document).on("change",".selectForCity", function(event) {
 
 
 
-			// ---GET RECENT SEARCHES CARD---
-			// code goes here
-
-
-
 
 		// new subtitle, after a city is selected
 		if (citySelected) {
@@ -1222,6 +1221,7 @@ $(document).on("change",".selectForCity", function(event) {
 				"<div class='card'>" +
 					"<div class='card-body'>" +
 						"<h3 class='card-title' style='color: black'>Recent Searches</h3>" +
+						"<h6 class='card-subtitle mb-2 text-muted'>The latest selections from all users</h6>" +
 						"<p class='card-text' style='overflow-y: auto; max-height: 300px; color: black' id='recentSearchesCard'></p>" +
 					"</div>" +
 				"</div>" +
