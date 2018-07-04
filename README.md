@@ -26,7 +26,7 @@
 
 ## Getting Started
 
-### This fun and informative site can be found at <a href="https://derkche.github.io/SomethingWithAPIs/">https://derkche.github.io/SomethingWithAPIs/</a>. Enjoy!
+### This fun and informative site can be found at <a href="https://derkche.github.io/MyAmericanGuide/">https://derkche.github.io/MyAmericanGuide/</a>. Enjoy!
 
 ## Team Members:
 
