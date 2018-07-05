@@ -1108,8 +1108,9 @@ $(document).on("change",".selectForCity", function(event) {
 						bizName = response.businesses[i].name;
 						bizRating = "Rating: " + response.businesses[i].rating;
 						bizAddy = response.businesses[i].location.address1;
-						bizURL = "<a href='" + response.businesses[i].url + "' target='blank'>Click here for more...</a>";    
-						$("#yelpCard").append(bizName+"<br>"+bizAddy+"<br>"+bizRating+"<br>"+bizURL+"<br><br>");
+						bizURL = "<a href='" + response.businesses[i].url + "' target='blank'>Click here for more...</a>";
+						bizImgURL = "<img src='"+response.businesses[i].image_url+"' style='max-height:85px;width:85px;float:right;'>" 
+						$("#yelpCard").append('<div class="card" style="width: 450px;"><div class="card-body row"><h6 class="card-title col-sm-12">'+bizName+'</h6><br><div class="col-sm-10" id="yelpRightDiv"><p id="yelpPTag" class="card-text">'+bizRating+'</p><p id="yelpPTag" class="card-text">'+bizAddy+'</p><p id="yelpPTag" class="card-text">'+bizURL+'</p></div><div class="col-sm-2" id="yelpLeftDiv">'+bizImgURL+'</div></div></div>');
 					}
 					if (i == 20) {
 						i = response.businesses.length;
@@ -1204,7 +1205,7 @@ $(document).on("change",".selectForCity", function(event) {
 				"<div class='card'>" +
 						"<div class='card-body'>" +
 					"<h3 class='card-title' style='color: black'>Yelp</h3>" +
-						"<h6 class='card-subtitle mb-2 text-muted'>Check out user reviews in " + selectedCityTitleCase + "</h6>" +
+						"<h6 class='card-subtitle mb-2 text-muted'>Check out best places to eat in " + selectedCityTitleCase + "</h6>" +
 						"<p class='card-text' style='overflow-y: auto; max-height: 300px; color: black' id='yelpCard'>" +
 						"</p>" +
 					"</div>" +
@@ -1286,10 +1287,3 @@ $(document).on("change",".selectForCity", function(event) {
 		}
 	};
 });
-
-
-
-
-
-
-
