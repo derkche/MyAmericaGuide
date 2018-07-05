@@ -1287,10 +1287,3 @@ $(document).on("change",".selectForCity", function(event) {
 		}
 	};
 });
-
-
-
-
-
-
-
